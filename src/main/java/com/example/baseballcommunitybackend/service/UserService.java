@@ -27,7 +27,7 @@ public class UserService {
                 throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
             }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-//            return userRepository.save(user);
+            userRepository.save(user);
         } catch (DuplicateKeyException e) {
             throw e;
         }
