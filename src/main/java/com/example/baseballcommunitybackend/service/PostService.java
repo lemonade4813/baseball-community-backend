@@ -30,9 +30,9 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Post createPost(Post board) {
-        board.setCreatedAt(LocalDateTime.now().toString());
-        return postRepository.save(board);
+    public Post createPost(Post post) {
+        post.setCreatedAt(LocalDateTime.now().toString());
+        return postRepository.save(post);
     }
 
     public Post updatePost(String id, Post updatedPost) {
@@ -43,7 +43,7 @@ public class PostService {
                     post.setAuthor(updatedPost.getAuthor());
                     return postRepository.save(post);
                 })
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다.: " + id));
     }
 
     public void deletePost(String id) {

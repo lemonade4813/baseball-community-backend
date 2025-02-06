@@ -1,7 +1,16 @@
 package com.example.baseballcommunitybackend.controller;
 
 import com.example.baseballcommunitybackend.document.User;
+import com.example.baseballcommunitybackend.dto.LoginDto;
+import com.example.baseballcommunitybackend.service.CustomUserDetailsService;
 import com.example.baseballcommunitybackend.service.UserService;
+import com.example.baseballcommunitybackend.util.JwtUtil;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,29 +22,35 @@ import org.springframework.core.io.UrlResource;
 import java.nio.file.*;
 import java.io.IOException;
 
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     private final String uploadDir = "uploads";
 
-    public UserController( UserService userService, BCryptPasswordEncoder passwordEncoder) {
+    public UserController( UserService userService,
+                           AuthenticationManager authenticationManager,
+                           JwtUtil jwtUtil,
+                           CustomUserDetailsService userDetailsService) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(
-            @RequestParam("userId") String userId,
+            @RequestParam(value = "userId", required = false) String userId,
             @RequestParam("team") String team,
             @RequestParam("password") String password,
             @RequestParam("nickname") String nickname,
-            @RequestParam("profileImage") MultipartFile profileImage) {
-
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
         try {
-
             Path uploadPath = Paths.get(uploadDir);
 
             // 폴더가 없으면 생성
@@ -43,10 +58,13 @@ public class UserController {
                 Files.createDirectories(uploadPath);
             }
 
-            // 이미지 저장
-            String fileName = userId + "_" + profileImage.getOriginalFilename();
-            Path imagePath = Paths.get(uploadDir).resolve(fileName);
-            Files.copy(profileImage.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+            String fileName = null;
+            if (profileImage != null && !profileImage.isEmpty()) {
+                // 이미지 저장
+                fileName = userId + "_" + profileImage.getOriginalFilename();
+                Path imagePath = uploadPath.resolve(fileName);
+                Files.copy(profileImage.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+            }
 
             // 사용자 저장
             User user = new User();
@@ -54,7 +72,9 @@ public class UserController {
             user.setTeam(team);
             user.setNickname(nickname);
             user.setPassword(password);
-            user.setProfileImagePath("/users/image/" + fileName);
+            if (fileName != null) {
+                user.setProfileImagePath("/users/image/" + fileName);
+            }
             userService.registerUser(user);
 
             return ResponseEntity.ok("성공적으로 회원가입을 완료했습니다.");
@@ -78,12 +98,15 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestParam("userId") String userId, @RequestParam("password") String password) {
-        boolean isAuthenticated = userService.authenticateUser(userId, password);
-        if (!isAuthenticated) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 또는 비밀번호가 잘못되었습니다.");
-        }
-        return ResponseEntity.ok("로그인에 성공하였습니다.");
+    public String login(@RequestBody LoginDto loginDto) {
+        System.out.println(loginDto);
+        String userId = loginDto.getUserId();
+        String Password = loginDto.getPassword();
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userId, Password)
+        );
+        System.out.println(1);
+        return jwtUtil.generateToken(userId);
     }
 
 }
