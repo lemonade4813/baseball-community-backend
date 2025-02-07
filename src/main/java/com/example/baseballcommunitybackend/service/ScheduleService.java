@@ -10,8 +10,11 @@ import java.util.List;
 @Service
 public class ScheduleService {
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
+
+    ScheduleService (MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     public List<Schedule> findAllSchedules() {
         return mongoTemplate.findAll(Schedule.class);
