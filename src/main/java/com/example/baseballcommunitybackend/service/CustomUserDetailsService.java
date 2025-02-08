@@ -23,11 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        System.out.println(user);
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUserId())
-                .password(user.getPassword()) // 이미 암호화된 비밀번호 사용
-                .roles("USER")
-                .build();
+
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(user.getUserId())
+//                .password(user.getPassword()) // 이미 암호화된 비밀번호 사용
+//                .roles("USER")
+//                .build();
+          return new CustomUserDetails(user);
     }
 }

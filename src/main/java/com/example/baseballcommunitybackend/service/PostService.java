@@ -30,7 +30,8 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Post createPost(Post post) {
+    public Post createPost(Post post, String userId) {
+        post.setAuthor(userId);
         post.setCreatedAt(LocalDateTime.now().toString());
         return postRepository.save(post);
     }
@@ -48,5 +49,12 @@ public class PostService {
 
     public void deletePost(String id) {
         postRepository.deleteById(id);
+    }
+
+    public boolean isAuthorOfPost(String postId, String authorId) {
+
+        return postRepository.findById(postId)
+                .map(post -> post.getAuthor().equals(authorId))
+                .orElse(false); // 게시물이 없으면 false 반환
     }
 }

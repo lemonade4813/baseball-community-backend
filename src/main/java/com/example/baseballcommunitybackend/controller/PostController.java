@@ -2,9 +2,11 @@ package com.example.baseballcommunitybackend.controller;
 
 
 import com.example.baseballcommunitybackend.document.Post;
+import com.example.baseballcommunitybackend.service.CustomUserDetails;
 import com.example.baseballcommunitybackend.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,8 +41,8 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
-        Post createdPost = postService.createPost(post);
+    public ResponseEntity<Post> createPost(@RequestBody Post post,  @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Post createdPost = postService.createPost(post, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost); // 201 Created
     }
 
@@ -57,5 +59,13 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable String id) {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/is-author")
+    public ResponseEntity<Boolean> isAuthor(
+            @PathVariable String id,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        boolean isAuthor = postService.isAuthorOfPost(id, userDetails.getUsername());
+        return ResponseEntity.ok(isAuthor);
     }
 }
