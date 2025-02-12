@@ -23,15 +23,13 @@ public class ScheduleController {
     @GetMapping("/schedule")
     public ResponseEntity<?> scheduleInfo(){
 
-
         try{
             List<Schedule> ScheduleList = scheduleService.findAllSchedules();
-            ResponseDTO<List<Schedule>> response = ResponseDTO.<List<Schedule>>builder().data(ScheduleList).build();
-            return ResponseEntity.ok().body(response);
+//            ResponseDTO<List<Schedule>> response = ResponseDTO.<List<Schedule>>builder().data(ScheduleList).build();
+            return ResponseEntity.ok().body(ScheduleList);
         }
         catch (Exception e){
-            ErrorDTO error = ErrorDTO.builder().error(e.getMessage()).build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("에러가 발생했습니다.");
 
         }
 

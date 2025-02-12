@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document(collection = "schedules")
 public class Schedule {
+    private String month;
     private String date;
     private String day;
     private String time;

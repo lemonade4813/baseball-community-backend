@@ -9,4 +9,5 @@ public class LoginResponseDTO {
     private String accessToken;
     private String nickname;
     private String profileImagePath;
+    private String team;
 }

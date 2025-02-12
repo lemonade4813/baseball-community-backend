@@ -15,5 +15,6 @@ public class Stadium {
     private Integer area;
     private String[] features;
     private String imagePath;
+    private String homepage;
 
 }

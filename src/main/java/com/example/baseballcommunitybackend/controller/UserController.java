@@ -119,7 +119,8 @@ public class UserController {
             LoginResponseDTO response = new LoginResponseDTO(
                     token,
                     user.getNickname(),
-                    user.getProfileImagePath()
+                    user.getProfileImagePath(),
+                    user.getTeam()
             );
             return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {

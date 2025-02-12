@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
                         .requestMatchers("/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                        .requestMatchers("/stadium").permitAll()
+                        .requestMatchers("/stadium/**").permitAll()
                         .requestMatchers("/schedule").permitAll()
                         .anyRequest().authenticated()
                 )
