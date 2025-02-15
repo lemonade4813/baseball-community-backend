@@ -16,5 +16,6 @@ public class Stadium {
     private String[] features;
     private String imagePath;
     private String homepage;
+    private Float[] coordinates;
 
 }
