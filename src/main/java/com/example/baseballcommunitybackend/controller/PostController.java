@@ -42,7 +42,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post,  @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Post createdPost = postService.createPost(post, userDetails.getUsername());
+        Post createdPost = postService.createPost(post, userDetails.getNickname());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost); // 201 Created
     }
 
@@ -65,7 +65,7 @@ public class PostController {
     public ResponseEntity<Boolean> isAuthor(
             @PathVariable String id,
             @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boolean isAuthor = postService.isAuthorOfPost(id, userDetails.getUsername());
+        boolean isAuthor = postService.isAuthorOfPost(id, userDetails.getNickname());
         return ResponseEntity.ok(isAuthor);
     }
 }
