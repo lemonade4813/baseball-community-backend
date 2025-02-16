@@ -42,6 +42,14 @@ public class UserService {
         return userOptional.isPresent() && passwordEncoder.matches(rawPassword, userOptional.get().getPassword());
     }
 
+    public boolean checkUserExists(String userId) {
+        return userRepository.existsByUserId(userId);
+    }
+
+    public boolean checkNicknameExists(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
+
 }
 
 

@@ -25,6 +25,8 @@ import org.springframework.core.io.UrlResource;
 
 import java.nio.file.*;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 
 
 @RestController
@@ -137,6 +139,18 @@ public class UserController {
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return ResponseEntity.ok("성공적으로 로그아웃 되었습니다.");
+    }
+
+    @GetMapping("/check-username")
+    public ResponseEntity<Map<String, Boolean>> checkUsername(@RequestParam String username) {
+        boolean exists = userService.checkUserExists(username);
+        return ResponseEntity.ok(Collections.singletonMap("available", !exists));
+    }
+
+    @GetMapping("/check-nickname")
+    public ResponseEntity<Map<String, Boolean>> checkNickname(@RequestParam String nickname) {
+        boolean exists = userService.checkNicknameExists(nickname);
+        return ResponseEntity.ok(Collections.singletonMap("available", !exists));
     }
 
 }
