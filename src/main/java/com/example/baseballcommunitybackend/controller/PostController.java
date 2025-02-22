@@ -2,7 +2,10 @@ package com.example.baseballcommunitybackend.controller;
 
 
 import com.example.baseballcommunitybackend.document.Post;
+import com.example.baseballcommunitybackend.document.PostRecommend;
+import com.example.baseballcommunitybackend.dto.PostRecommendRequestDTO;
 import com.example.baseballcommunitybackend.service.CustomUserDetails;
+import com.example.baseballcommunitybackend.service.PostRecommendService;
 import com.example.baseballcommunitybackend.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +19,11 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
+    private final PostRecommendService  postRecommendService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, PostRecommendService postRecommendService) {
         this.postService = postService;
+        this.postRecommendService = postRecommendService;
     }
 
     @GetMapping
@@ -68,4 +73,35 @@ public class PostController {
         boolean isAuthor = postService.isAuthorOfPost(id, userDetails.getNickname());
         return ResponseEntity.ok(isAuthor);
     }
+
+    @PostMapping("/recommend")
+    public ResponseEntity<String> recommend(
+            @RequestBody PostRecommendRequestDTO postRecommendRequestDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        System.out.println(postRecommendRequestDTO);
+
+        PostRecommend postRecommend = new PostRecommend();
+        postRecommend.setPostId(postRecommendRequestDTO.getId());
+        postRecommend.setIsRecommend(postRecommendRequestDTO.getIsRecommend());
+        postRecommend.setNickname(userDetails.getNickname());
+
+        postRecommendService.postRecommendSave(postRecommend);
+
+        return ResponseEntity.ok("처리 되었습니다.");
+    }
+
+
+    @GetMapping("/{id}/recommend/count")
+    public ResponseEntity<?> recommendCount(
+            @PathVariable String id) {
+
+        PostRecommendService.PostRecommendCount count = postRecommendService.getPostRecommendCount(id);
+
+        return ResponseEntity.ok(count);
+    }
+
+
+
+
 }

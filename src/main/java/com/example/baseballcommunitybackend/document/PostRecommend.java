@@ -1,19 +1,17 @@
 package com.example.baseballcommunitybackend.document;
 
+
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-
 @Data
-@Document(collection = "messages")
-public class ChatMessage {
+@Document(collection = "post_recommend")
+public class PostRecommend {
+
     @Id
     private String id;
-    private String sender;
-    private String team;
-    private String content;
-    private LocalDateTime timestamp;
-
+    private String postId;
+    private String nickname;
+    private Boolean isRecommend;
 }

@@ -31,6 +31,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/chat/**").permitAll()
                         .requestMatchers("/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .requestMatchers("/stadium/**").permitAll()
@@ -42,6 +44,7 @@ public class SecurityConfig {
 
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
                         UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
