@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .requestMatchers("/stadium/**").permitAll()
+                        .requestMatchers("/api/schedule/**").permitAll()
                         .requestMatchers("/schedule").permitAll()
                         .anyRequest().authenticated()
                 )
