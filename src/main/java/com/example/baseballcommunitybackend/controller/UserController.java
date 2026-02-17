@@ -3,6 +3,7 @@ package com.example.baseballcommunitybackend.controller;
 import com.example.baseballcommunitybackend.document.User;
 import com.example.baseballcommunitybackend.dto.LoginRequestDTO;
 import com.example.baseballcommunitybackend.dto.LoginResponseDTO;
+import com.example.baseballcommunitybackend.dto.TeamCountDTO;
 import com.example.baseballcommunitybackend.service.CustomUserDetails;
 import com.example.baseballcommunitybackend.service.CustomUserDetailsService;
 import com.example.baseballcommunitybackend.service.UserService;
@@ -26,6 +27,7 @@ import org.springframework.core.io.UrlResource;
 import java.nio.file.*;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 
@@ -153,4 +155,9 @@ public class UserController {
         return ResponseEntity.ok(Collections.singletonMap("available", !exists));
     }
 
+    @GetMapping("/counts-by-team")
+    public ResponseEntity<List<TeamCountDTO>> getUserCountByteam() {
+        List<TeamCountDTO> teamCount = userService.getTeamCount();
+        return ResponseEntity.ok(teamCount);
+    }
 }

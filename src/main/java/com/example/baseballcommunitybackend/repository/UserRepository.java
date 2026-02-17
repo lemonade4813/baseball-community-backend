@@ -1,6 +1,8 @@
 package com.example.baseballcommunitybackend.repository;
 
 import com.example.baseballcommunitybackend.document.User;
+import com.example.baseballcommunitybackend.dto.TeamCountDTO;
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -14,4 +16,9 @@ public interface UserRepository extends MongoRepository<User, String> {
     boolean existsByNickname(String nickname);
     List<User> findAllByNickname(String nickname);
 
+
+    @Aggregation(pipeline = {
+            "{ '$group': { '_id': '$team', 'totalCount': { '$sum': 1 } } }"
+    })
+    List<TeamCountDTO> groupByTeam();
 }

@@ -1,12 +1,14 @@
 package com.example.baseballcommunitybackend.service;
 
 import com.example.baseballcommunitybackend.document.User;
+import com.example.baseballcommunitybackend.dto.TeamCountDTO;
 import com.example.baseballcommunitybackend.repository.UserRepository;
 import com.mongodb.DuplicateKeyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,6 +52,9 @@ public class UserService {
         return userRepository.existsByNickname(nickname);
     }
 
+    public List<TeamCountDTO> getTeamCount() {
+        return userRepository.groupByTeam();
+    }
 }
 
 
