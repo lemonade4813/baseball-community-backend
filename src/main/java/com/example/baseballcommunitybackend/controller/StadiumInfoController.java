@@ -1,7 +1,5 @@
 package com.example.baseballcommunitybackend.controller;
 
-
-import com.example.baseballcommunitybackend.document.Post;
 import com.example.baseballcommunitybackend.document.Stadium;
 import com.example.baseballcommunitybackend.service.StadiumInfoService;
 import org.springframework.core.io.Resource;
@@ -29,10 +27,15 @@ public class StadiumInfoController {
     private final String uploadDir = "uploads/stadium";
 
     @GetMapping
-    public ResponseEntity<List<Stadium>> getStadiumInfo() {
+    public ResponseEntity<List<Stadium>> getStadiumList() {
         List<Stadium> stadiumInfoList = stadiumInfoService.findAllStaudiumInfo();
-
         return ResponseEntity.ok(stadiumInfoList);
+    }
+
+    @GetMapping("/{team}")
+    public ResponseEntity<Stadium> getStationByTeam(@PathVariable String team) {
+        Stadium stadiumInfo = stadiumInfoService.findStaudiumInfoByTeam(team);
+        return ResponseEntity.ok(stadiumInfo);
     }
 
     @GetMapping("/image/{fileName:.+}")
