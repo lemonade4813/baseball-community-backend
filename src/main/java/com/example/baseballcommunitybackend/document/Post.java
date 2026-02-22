@@ -14,4 +14,5 @@ public class Post {
     private String content;
     private String author;
     private String createdAt;
+    private String team;
 }

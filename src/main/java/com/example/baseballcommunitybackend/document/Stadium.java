@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Stadium {
 
     private String team;
+    private String name;
     private String stadiumName;
     private String address;
     private Integer seat;

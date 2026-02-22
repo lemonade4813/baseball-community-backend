@@ -3,7 +3,9 @@ package com.example.baseballcommunitybackend.controller;
 
 import com.example.baseballcommunitybackend.document.Post;
 import com.example.baseballcommunitybackend.document.PostRecommend;
+import com.example.baseballcommunitybackend.dto.PostCountDTO;
 import com.example.baseballcommunitybackend.dto.PostRecommendRequestDTO;
+import com.example.baseballcommunitybackend.dto.TeamCountDTO;
 import com.example.baseballcommunitybackend.service.CustomUserDetails;
 import com.example.baseballcommunitybackend.service.PostRecommendService;
 import com.example.baseballcommunitybackend.service.PostService;
@@ -47,7 +49,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post,  @AuthenticationPrincipal CustomUserDetails userDetails) {
-        Post createdPost = postService.createPost(post, userDetails.getNickname());
+        Post createdPost = postService.createPost(post, userDetails.getNickname(), userDetails.getTeam());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost); // 201 Created
     }
 
@@ -89,6 +91,8 @@ public class PostController {
         postRecommendService.postRecommendSave(postRecommend);
 
         return ResponseEntity.ok("처리 되었습니다.");
+
+
     }
 
 
@@ -101,7 +105,16 @@ public class PostController {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/count-post-by-nickname")
+    public ResponseEntity<List<PostCountDTO>> getUserCountNickname() {
+        List<PostCountDTO> postCount = postService.getPostCountByNickname();
+        return ResponseEntity.ok(postCount);
+    }
 
 
-
+    @GetMapping("/count-post-by-team")
+    public ResponseEntity<List<PostCountDTO>> getUserCountByTeam() {
+        List<PostCountDTO> postCount = postService.getPostCountByTeam();
+        return ResponseEntity.ok(postCount);
+    }
 }

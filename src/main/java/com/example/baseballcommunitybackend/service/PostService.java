@@ -2,6 +2,8 @@ package com.example.baseballcommunitybackend.service;
 
 import com.example.baseballcommunitybackend.document.Post;
 import com.example.baseballcommunitybackend.document.User;
+import com.example.baseballcommunitybackend.dto.PostCountDTO;
+import com.example.baseballcommunitybackend.dto.TeamCountDTO;
 import com.example.baseballcommunitybackend.repository.PostRepository;
 import com.example.baseballcommunitybackend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -34,8 +36,9 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Post createPost(Post post, String nickname) {
+    public Post createPost(Post post, String nickname, String team) {
         post.setAuthor(nickname);
+        post.setTeam(team);
         post.setCreatedAt(LocalDateTime.now().toString());
         return postRepository.save(post);
     }
@@ -61,4 +64,13 @@ public class PostService {
                 .map(post -> post.getAuthor().equals(author))
                 .orElse(false); // 게시물이 없으면 false 반환
     }
+
+    public List<PostCountDTO> getPostCountByNickname() {
+        return postRepository.groupByNickname();
+    }
+
+    public List<PostCountDTO> getPostCountByTeam() {
+        return postRepository.groupByTeam();
+    }
+
 }
