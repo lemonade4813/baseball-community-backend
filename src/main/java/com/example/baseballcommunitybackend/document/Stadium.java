@@ -12,6 +12,7 @@ public class Stadium {
     private String name;
     private String stadiumName;
     private String address;
+    private String direction;
     private Integer seat;
     private Integer area;
     private String[] features;

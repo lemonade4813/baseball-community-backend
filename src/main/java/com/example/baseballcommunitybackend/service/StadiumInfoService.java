@@ -37,6 +37,7 @@ public class StadiumInfoService {
                 .set("address", stadium.getAddress())
                 .set("seat", stadium.getSeat())
                 .set("area", stadium.getArea())
+                .set("direction", stadium.getDirection())
                 .set("features", stadium.getFeatures()) // 배열 업데이트
                 .set("imagePath", stadium.getImagePath())
                 .set("homepage", stadium.getHomepage())
